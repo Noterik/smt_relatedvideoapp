@@ -31,9 +31,9 @@ import org.springfield.lou.screen.*;
 import org.springfield.mojo.interfaces.ServiceInterface;
 import org.springfield.mojo.interfaces.ServiceManager;
 
-public class RelatedVideo extends Html5Application{
+public class RelatedvideoApplication extends Html5Application{
 	
- 	public RelatedVideo(String id) {
+ 	public RelatedvideoApplication(String id) {
 		super(id); 
 	}
  	
