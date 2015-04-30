@@ -39,148 +39,6 @@ public class RelatedvideoApplication extends Html5Application{
  	
 	public Hashtable<Integer, String> heshfilter = new Hashtable<Integer, String>();
 	private String platformFilter = "Europeana";
-	private String searchKeysForPlatformFilter;
- 	private String videobuildforplatform;
- 	public void decadefilter(Screen s,String content) {
- 		System.out.println("decadeFilter:" +content);
- 		String decade = content;
- 		
- 		String videoPath = (String)s.getProperty("videoid");
-		FsNode videonode = Fs.getNode(videoPath);
-		if(videonode!=null) { //Build the search terms html
-			String genreProprty = videonode.getProperty("genre");
-			String terms = videonode.getProperty("ThesaurusTerm");
-			String title = videonode.getProperty("TitleSet_TitleSetInEnglish_title");
-			String split[]= title.split(" ");
-			String titleKeywords = "";
-
-			for(int i = 0; i < split.length; i++) {
-				String word = split[i];
-				System.out.println("Title key word: " + word + "!");
-				
-				if(word.length()>3){
-					titleKeywords += word + " ";
-				}	
-				
-			}
-			heshfilter.put(1, genreProprty);
-			heshfilter.put(2, terms);
-			heshfilter.put(3, titleKeywords);
-			heshfilter.put(4, decade);
-		}
- 		String result =  setAlbrightFilter(s);
- 		
- 		
- 		
- 		
- 		if(result!=null) {
-			if(videonode!=null) {
-				String genreProprty = videonode.getProperty("genre");
-				String terms = videonode.getProperty("ThesaurusTerm");
-				String title = videonode.getProperty("TitleSet_TitleSetInEnglish_title");
-				String split[]= title.split(" ");
-				String titleKeywords = "";
-
-				for(int i = 0; i < split.length; i++) {
-					String word = split[i];
-					System.out.println("Title key word: " + word + "!");
-					
-					if(word.length()>3){
-						titleKeywords += word + " ";
-					}	
-					
-				}
-				terms = terms.replaceAll(","," "); //Terms can be multiple separated by comma, so replace comma with space
-				String all = genreProprty + " " + terms + " " + decade;
-			
-				String body = "<div class=\"qtitle\">Query Structure:</div>";
-				body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Theme1: </label></li><li class=\"valuee\">"+ genreProprty +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"1\">X</a></li></ul></div>";
-				body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Topic: </label></li><li class=\"valuee\">"+ terms +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"2\">X</a></li></ul></div>";
-				body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Keywords from title: </label></li><li class=\"valuee\">"+ titleKeywords +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"3\">X</a></li></ul></div>";
-				body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Decade: </label></li><li class=\"valuee\">"+ decade +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"4\">X</a></li></ul></div>";
-				body += "<div class=\"rul2\"><button type=\"button\">Save</button></div>"; 
-				loadContent(s, "searchkeys");
-				this.searchKeysForPlatformFilter = body;
-				s.setContent("searchkeys", body);
-				s.putMsg("searchkeys", "", "initEvents()");
-			}
-
-			renderAlbrigthResults(s, result);
-		}
- 	}
- 	
- 	public void filetypefilter(Screen s,String content) {
- 		System.out.println("filetypefilter:" +content);
- 		String filter = content;
- 		s.setProperty("filter", filter);
- 		
- 		String videoPath = (String)s.getProperty("videoid");
-		FsNode videonode = Fs.getNode(videoPath);
-		if(videonode!=null) { //Build the search terms html
-			String genreProprty = videonode.getProperty("genre");
-			String terms = videonode.getProperty("ThesaurusTerm");
-			String title = videonode.getProperty("TitleSet_TitleSetInEnglish_title");
-			String split[]= title.split(" ");
-			String titleKeywords = "";
-
-			for(int i = 0; i < split.length; i++) {
-				String word = split[i];
-				System.out.println("Title key word: " + word + "!");
-				
-				if(word.length()>3){
-					titleKeywords += word + " ";
-				}	
-				
-			}
-			heshfilter.put(1, genreProprty);
-			heshfilter.put(2, terms);
-			heshfilter.put(3, titleKeywords);
-		}
- 		
- 		String result =  setAlbrightFilter(s);
-		
- 		
-		if(result != null) { // Build up related result
-				String filterType = "Video";
-				if(filter.equals("ep_video")){
-					 filterType = "Video";
-				}else if(filter.equals("ep_images")){
-					 filterType = "Image";
-				}
-				if(videonode!=null) {
-					String genreProprty = videonode.getProperty("genre");
-					String terms = videonode.getProperty("ThesaurusTerm");
-					String title = videonode.getProperty("TitleSet_TitleSetInEnglish_title");
-					String split[]= title.split(" ");
-					String titleKeywords = "";
-
-					for(int i = 0; i < split.length; i++) {
-						String word = split[i];
-						System.out.println("Title key word: " + word + "!");
-						
-						if(word.length()>3){
-							titleKeywords += word + " ";
-						}	
-						
-					}
-					 
-					terms = terms.replaceAll(","," "); //Terms can be multiple separated by comma, so replace comma with space
-
-					String body = "<div class=\"qtitle\">"+filterType+" query structure:</div>";
-					body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Theme2: </label></li><li class=\"valuee\">"+ genreProprty +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"1\">X</a></li></ul></div>";
-					body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Topic: </label></li><li class=\"valuee\">"+ terms +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"2\">X</a></li></ul></div>";
-					body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Keywords from title: </label></li><li class=\"valuee\">"+ titleKeywords +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"3\">X</a></li></ul></div>";
-					body += "<div class=\"rul2\"><button type=\"button\">Save</button></div>";
-					loadContent(s, "searchkeys");
-					this.searchKeysForPlatformFilter = body;
-					s.setContent("searchkeys", body);
-					s.putMsg("searchkeys", "", "initEvents()");
-
-				}
-				
-				renderAlbrigthResults(s, result);
-			}
- 	}
     
     public void searchvideo(Screen s,String content) {
     	System.out.println("searchVideo:" +content);
@@ -188,7 +46,7 @@ public class RelatedvideoApplication extends Html5Application{
 		String url = (String)s.getProperty("videouri.value");
 		System.out.println("VIDEO ID: " + url);
 		s.setProperty("videoid", url);
-		s.setProperty("filter", "ep_images");
+		s.setProperty("filter", "ep_videos");
 		
 		String videoPath = (String)s.getProperty("videouri.value");
 		FsNode videonode = Fs.getNode(videoPath);
@@ -216,11 +74,7 @@ public class RelatedvideoApplication extends Html5Application{
 		String result =  setAlbrightFilter(s);
 
 		if(result != null) { // Build up related result
-				
 				String videobuild = "";
-				loadContent(s, "platformfilter");
-				loadContent(s, "filetypefilter");
-				loadContent(s, "decadefilter");
 								
 				if(videonode!=null) {
 					String title = videonode.getProperty("TitleSet_TitleSetInEnglish_title");
@@ -270,55 +124,12 @@ public class RelatedvideoApplication extends Html5Application{
 					videobuild += "<p>"+series+"</p>";
 					videobuild += "</div>";	
 				}
-				
-				this.videobuildforplatform = videobuild;
-				
-				
-				if(this.platformFilter.equals("Europeana")){
 					s.setContent("player", videobuild);
-					
-					System.out.println(this.platformFilter);
-				}else{
-					System.out.println(this.platformFilter);
-					s.setContent("player", "THIS IS SPARTA I NE SE PODURJA KOPELE");
-				}
-				
-				
-				if(videonode!=null) { //Build the search terms html
-					String genreProprty = videonode.getProperty("genre");
-					String terms = videonode.getProperty("ThesaurusTerm");
-					String title = videonode.getProperty("TitleSet_TitleSetInEnglish_title");
-					String split[]= title.split(" ");
-					String titleKeywords = "";
-
-					for(int i = 0; i < split.length; i++) {
-						String word = split[i];
-						System.out.println("Title key word: " + word + "!");
-						
-						if(word.length()>3){
-							titleKeywords += word + " ";
-						}	
-						
-					}
-				
-					 System.out.println("FILTER HASH TABLE" + heshfilter);
-					
-					titleKeywords = titleKeywords.trim();
-					
-					String body = "<div class=\"qtitle\">Image query structure:</div>";
-					body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Theme: </label></li><li class=\"valuee\">"+ genreProprty +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"1\">X</a></li></ul></div>";
-					body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Topic: </label></li><li class=\"valuee\">"+ terms +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"2\">X</a></li></ul></div>";
-					body += "<div class=\"rul1\"><ul><li class=\"labell\"><label>Keywords from title: </label></li><li class=\"valuee\">"+ titleKeywords +"</li><li class=\"ex\"><a href=\"#\" class=\"dismiss\" id=\"3\">X</a></li></ul></div>";
-					body += "<div class=\"rul2\"><button type=\"button\" id=\"testSave\">Save</button></div>";
-					loadContent(s, "searchkeys");
-					this.searchKeysForPlatformFilter = body;
-					s.setContent("searchkeys", body);
-					s.putMsg("searchkeys", "", "initEvents()");
 				}	
+			
 				
 				renderAlbrigthResults(s, result);
 			}
-	}
 
    
     public void contentToProperties(Screen s,String content) {
@@ -330,22 +141,13 @@ public class RelatedvideoApplication extends Html5Application{
 		
 	}
     
-    public void removeFilters(Screen s, String str){
-        System.out.println("----------------------------------------------------------------------------");
- 	    System.out.println("ITEM WITH ID: " + str + " HAS BEEN REMOVED");
- 	    heshfilter.remove(Integer.parseInt(str));
- 	    System.out.println(heshfilter);
- 	    String result = setAlbrightFilter(s);
- 	    renderAlbrigthResults(s, result);
-    }
-
-
-    
     public String setAlbrightFilter(Screen s){
     	
     	String url = (String)s.getProperty("videoid");
     	String filter = (String)s.getProperty("filter");
 		url = url + "/" + filter + "/";
+		
+		System.out.println("URL: " + url);
     	
 		String fsxml = "<fsxml><properties><keywords>";
 		
@@ -363,11 +165,12 @@ public class RelatedvideoApplication extends Html5Application{
 			s.setContent("defaultoutput", msg);
 		} else {
 			result = albright.get(url,fsxml,"text/xml");
+			System.out.println("ALBRIGHT RESULT: " + result);
 			if(result==null) { //No video
-				s.setContent("defaultoutput", "<h2>No such " + filter + "</h2>");
+				s.setContent("defaultoutput", "<h2>No such " +   "</h2>");
+//				filter
 			}
 		}
-        System.out.println("DAS IST OUR RESULT: " + result);
         return result;
     }
     
@@ -388,25 +191,26 @@ public class RelatedvideoApplication extends Html5Application{
 			 * thumbnail
 			 * provider
 			 */
-			String body = "<div id=\"slider1\">"
-					+ "<a class=\"buttons prev\" href=\"#\">&#60;</a>"
-					+ "<div class=\"viewport\">"
-					+ "<ul class=\"overview\">";
+			String body = "";
+//			String body = "<div id=\"slider1\">"
+//					+ "<a class=\"buttons prev\" href=\"#\">&#60;</a>"
+//					+ "<div class=\"viewport\">"
+//					+ "<ul class=\"overview\">";
 			
 			for(Iterator<FsNode> iter = nodes.getNodes().iterator() ; iter.hasNext(); ) {
 				FsNode n = (FsNode)iter.next(); 
-				// body += "<div class='item'>";
+				body += "<div class='item'>";
 				String thumbnail = n.getProperty("thumbnail");
 				String objurl = n.getProperty("url");
 				
 				if(thumbnail!=null) { // Check if there is a thumbnail
-					// body += "<a href='" + objurl + "' target=\"_blank\">";
+					 body += "<a href='" + objurl + "' target=\"_blank\">";
 					body += "<li><img src=\""+thumbnail+"\"></li>";
-
-					// body += "<img src='" + thumbnail + "' />";
-					// body += "</a>";
+	
+					 body += "<img src='" + thumbnail + "' />";
+					 body += "</a>";
 				}
-			   // body += "</div>";
+			   body += "</div>";
 			}
 			body += "</ul>" 
 					+"</div>"
@@ -426,20 +230,5 @@ public class RelatedvideoApplication extends Html5Application{
 			}
 		}
     }
-    public void platformfilter(Screen s, String val)
-    {
-    	this.platformFilter = val;
-    	
-    	if(this.platformFilter.equals("Europeana")){
-    		loadContent(s, "searchkeys");
-			System.out.println(this.platformFilter);
-			s.setContent("player", this.videobuildforplatform);
-			//s.setContent("searchkeays", this.searchKeysForPlatformFilter);
-		}else {
-			s.setContent("player", "<div class=\"noGoogle\">The functionality is not supported yet</div>");
-			s.removeContent("searchkeys");
-			removeContent(s, "searchkeys");
-		}
-    	System.out.println(val);
-    }
+
 }
