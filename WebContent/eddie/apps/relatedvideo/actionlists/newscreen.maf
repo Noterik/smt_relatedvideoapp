@@ -1,5 +1,4 @@
 setUrlTrigger(/lou/relatedvideo,/lou/domain/espace/html5application/relatedvideo)
 loadStyleSheet(screen,generic) // load the generic stylesheet
 loadContent(screen,titlepart) // load the titlepart
-setContent(screen,videoinput,"<input id="videouri" name=\"videouri\"> ")
-setDiv(screen,videouri,"bind:change")
+callServer(searchvideo,screen,content)
