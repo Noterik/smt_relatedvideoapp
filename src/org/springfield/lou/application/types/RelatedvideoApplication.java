@@ -43,7 +43,7 @@ public class RelatedvideoApplication extends Html5Application {
 		String url = "/domain/espace/user/luce/video/EUS_14D168BAE77F6236F8FDC47D64EFE807";
 		System.out.println("VIDEO ID: " + url);
 		s.setProperty("videoid", url);
-		s.setProperty("filter", "ep_videos");
+		s.setProperty("filter", "ep_images");
 
 		String videoPath = "/domain/espace/user/luce/video/EUS_14D168BAE77F6236F8FDC47D64EFE807";
 		FsNode videonode = Fs.getNode(videoPath);
@@ -122,35 +122,39 @@ public class RelatedvideoApplication extends Html5Application {
 		}
 		return result;
 	}
-
+	
 	public void renderAlbrigthResults(Screen s, String results) {
 		FSList nodes = new FSList().parseNodes(results);
-		if (nodes.size() > 0) {
-			String body = "";
-			for (Iterator<FsNode> iter = nodes.getNodes().iterator(); iter
-					.hasNext();) {
-				FsNode n = (FsNode) iter.next();
-				body += "<div class='item'>";
-				String thumbnail = n.getProperty("thumbnail");
-				String objurl = n.getProperty("url");
-				if (thumbnail != null) {
-					body += "<a href='" + objurl + "' target=\"_blank\">";
-					body += "<li><img src=\"" + thumbnail + "\"></li>";
-
-					body += "<img src='" + thumbnail + "' />";
-					body += "</a>";
-				}
-				body += "</div>";
-			}
-
+			int stp=0; 
+				if (nodes.size() > 0) {
+					String body = "";
+					for (Iterator<FsNode> iter = nodes.getNodes().iterator(); iter
+							.hasNext();) {
+						FsNode n = (FsNode) iter.next();
+						body += "<div class='item'>";
+						String thumbnail = n.getProperty("thumbnail");
+						String objurl = n.getProperty("url");
+						if (thumbnail != null) {
+							body += "<a href='" + objurl + "' target=\"_blank\">";
+							body += "<li><img src=\"" + thumbnail + "\"></li>";
+		
+						//	body += "<img src='" + thumbnail + "' />";
+							body += "</a>";
+						}
+						body += "</div>";
+						if(stp==4){
+							break;
+						}
+						stp++;
+						}
 			body += "</ul>" + "</div>" + "</div>";
 			if (this.platformFilter.equals("Europeana")) {
 				s.setContent("defaultoutput", body);
 			}
-		} else {
-			if (this.platformFilter.equals("Europeana")) {
-				s.setContent("defaultoutput", "<h2>No related items</h2>");
+			} else {
+				if (this.platformFilter.equals("Europeana")) {
+					s.setContent("defaultoutput", "<h2>No related items</h2>");
+				}
 			}
-		}
 	}
 }
