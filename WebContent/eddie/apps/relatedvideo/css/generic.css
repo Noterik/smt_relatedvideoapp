@@ -147,6 +147,10 @@ th {
 	font-weight: bold;
 }
 
+#video1 {
+	background-color: black;
+}
+
 #videoinput {
 	text-align: center;
 	margin-bottom: 30px;
