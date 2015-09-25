@@ -76,8 +76,7 @@ public class RelatedvideoApplication extends Html5Application {
 				videobuild += "<video id=\"video1\" controls preload=\"none\" data-setup=\"{}\">";
 				String mounts[] = rawvideonode.getProperty("mount").split(",");
 				String mount = mounts[0];
-				videoPath = videoPath.replace("espace", "euscreenxl").replace(
-						"luce", "eu_luce");
+				videoPath = videoPath.replace("espace", "euscreenxl").replace("luce", "eu_luce");
 				if (mount.indexOf("http://") == -1
 						&& mount.indexOf("rtmp://") == -1) {
 					String ap = "http://" + mount + ".noterik.com/progressive/"
